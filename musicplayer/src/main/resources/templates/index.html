@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gemann Music</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background-color: #181818;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .sidebar h2 {
+            color: #1db954;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar img.logo {
+            width: 30px;
+            height: 30px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            transition: color 0.2s;
+        }
+
+        .sidebar a:hover {
+            color: #1db954;
+        }
+
+        .main-content {
+            margin-left: 240px;
+            width: calc(100% - 240px);
+        }
+
+        header {
+            background-color: #1db954;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .user-actions button {
+            background-color: #fff;
+            color: #1db954;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .user-actions button:hover {
+            background-color: #e6e6e6;
+        }
+
+        .music-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .music-card {
+            background-color: #181818;
+            border-radius: 10px;
+            padding: 15px;
+            width: 200px;
+            text-align: center;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        .music-card:nth-child(1) { animation-delay: 0.2s; }
+        .music-card:nth-child(2) { animation-delay: 0.4s; }
+        .music-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .music-card:hover {
+            transform: scale(1.05);
+        }
+
+        .music-card img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .music-card h3 {
+            margin: 10px 0 5px;
+            font-size: 1.1em;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #222;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #1db954;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .modal-content button {
+            width: 100%;
+            background-color: #1db954;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>
+            <img src="/images/logo.png" alt="Gemann Logo" class="logo">
+            Gemann
+        </h2>
+        <a href="/">Home</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <h1>Gemann Music</h1>
+            <div class="user-actions">
+                <button onclick="openModal('signupModal')">Sign Up</button>
+                <button onclick="openModal('loginModal')">Login</button>
+            </div>
+        </header>
+
+        <div class="music-container">
+            <div class="music-card">
+                <img src="/images/highLifenGmajor.jpeg" alt="Song 1 Cover">
+                <h3>HighLife in G'Major</h3>
+                <audio controls>
+                    <source src="/api/music/play/HiLifeinGmajor.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+
+            <div class="music-card">
+                <img src="/images/yePapa.jpeg" alt="Song 2 Cover">
+                <h3>Ye Papa</h3>
+                <audio controls>
+                    <source src="/api/music/play/GEMANN. Ye papa. Ghana hilife music..mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+
+            <div class="music-card">
+                <img src="/images/ebususaGeeman.jpg" alt="Song 3 Cover">
+                <h3>Ebusua</h3>
+                <audio controls>
+                    <source src="/api/music/play/Gemann - Ebusua _Deasa Records _ GP 102 CD_ 1991_ - Gemann - SoundLoadMate.com.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login</h2>
+            <input type="email" placeholder="Email">
+            <input type="password" placeholder="Password">
+            <button>Login</button>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <form action="/users" method="post">
+                <h2>Sign Up</h2>
+                <input type="text" placeholder="First Name">
+                <input type="text" placeholder="Last Name">
+                <input type="email" placeholder="Email">
+                <input type="password" placeholder="Password">
+                <input type="password" placeholder="Confirm Password">
+                <button>Register</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Close modal on background click
+        window.onclick = function(e) {
+            ['loginModal', 'signupModal'].forEach(id => {
+                const modal = document.getElementById(id);
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        };
+    </script>
+</body>
+</html>
