@@ -254,15 +254,16 @@
     <div id="signupModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('signupModal')">&times;</span>
-            <form action="/users" method="post">
+            <form id="signupForm">
                 <h2>Sign Up</h2>
-                <input type="text" placeholder="First Name">
-                <input type="text" placeholder="Last Name">
-                <input type="email" placeholder="Email">
-                <input type="password" placeholder="Password">
-                <input type="password" placeholder="Confirm Password">
-                <button>Register</button>
+                <input type="text" name="firstName" id="firstName" placeholder="First Name" required>
+                <input type="text" name="lastName" id="lastName" placeholder="Last Name" required>
+                <input type="email" name="email" id="email" placeholder="Email" required>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" required>
+                <button type="submit">Register</button>
             </form>
+
         </div>
     </div>
 
@@ -284,6 +285,49 @@
                 }
             });
         };
+
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // prevent default form submission
+
+        const userData = {
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            confirmPassword: document.getElementById('confirmPassword').value
+        };
+
+        fetch('/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(async response => {
+            const contentType = response.headers.get("Content-Type");
+
+            if (!response.ok) {
+                if (contentType && contentType.includes("application/json")) {
+                    const err = await response.json();
+                    throw new Error(err.error || err.message || "Signup failed");
+                } else {
+                    const text = await response.text(); // HTML fallback
+                    throw new Error("Server error: " + text.slice(0, 100));
+                }
+            }
+
+            return response.json();
+        })
+        .then(data => {
+            alert(`User created! Welcome, ${data.firstName}.`);
+            closeModal('signupModal');
+        })
+        .catch(error => {
+            alert("Error: " + error.message);
+        });
+
+    });
     </script>
 </body>
 </html>

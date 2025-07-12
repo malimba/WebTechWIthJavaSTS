@@ -1,9 +1,12 @@
 package com.example.musicplayer.ws.service;
 
-//retrieve user dto
+import com.example.musicplayer.ws.shared.dto.UserDto; //retrieve user dto
+
+
 
 
 //interface for user service
-public class UserService {
+public interface UserService {
     
+    UserDto createUser(UserDto user);
 }
