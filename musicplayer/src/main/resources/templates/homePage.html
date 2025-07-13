@@ -72,6 +72,9 @@
   <header>
     <h1>Gemann Music</h1>
     <input type="text" id="searchInput" placeholder="Search music...">
+    <button id="logoutBtn" style="margin-left: 10px; padding: 10px; background: #fff; border: none; border-radius: 5px; cursor: pointer;">
+      Logout
+    </button>
   </header>
 
   <div class="music-container" id="musicContainer">
@@ -172,8 +175,16 @@
     document.getElementById("searchInput").addEventListener("input", function () {
       fetchSongs(this.value);
     });
+    //logout functionality below
+     document.getElementById("logoutBtn").addEventListener("click", function () {
+  
 
-    // Optionally preload everything on load
+    // Clearing local storage
+    localStorage.clear()
+
+    // Redirect to home(index page)
+    window.location.href = "/";
+  });
   </script>
 </body>
 </html>
