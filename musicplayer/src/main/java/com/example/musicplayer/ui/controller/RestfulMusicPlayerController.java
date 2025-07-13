@@ -16,6 +16,7 @@ import org.springframework.core.io.Resource;
 @RequestMapping("/api/music")
 public class RestfulMusicPlayerController{
     
+    //endpoint to serve and play specific song
     @GetMapping(value="/play/{filename}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<Resource> playSong(@PathVariable String filename) throws IOException{
         Resource file = new ClassPathResource("static/music/" + filename);
@@ -27,4 +28,7 @@ public class RestfulMusicPlayerController{
                 .contentType(MediaType.parseMediaType("audio/mpeg"))
                 .body(file);
     }
+
+    //endpoint to list songs stored on the server: used with search feature
+    
 }
