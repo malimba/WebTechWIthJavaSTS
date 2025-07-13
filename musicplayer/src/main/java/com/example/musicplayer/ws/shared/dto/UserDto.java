@@ -13,7 +13,18 @@ public class UserDto implements Serializable{
 	private String encryptedPassword;
 	private String emailVerificationToken;
 	private Boolean emailVerificationStatus =false;
+
+	//create default constructor (since login constructor was made)
+	public UserDto(){
+
+	}
 	
+	//create contructor for login
+	public UserDto(String email, String password){
+		this.email = email;
+		this.password = password;
+	}
+
 	public long getId() {
 		return id;
 	}

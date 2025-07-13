@@ -243,10 +243,12 @@
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('loginModal')">&times;</span>
-            <h2>Login</h2>
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Password">
-            <button>Login</button>
+            <form id="loginForm">
+                <h2>Login</h2>
+                <input type="email" name="lEmail" id="lEmail" placeholder="Email">
+                <input type="password" name="lPassword" id="lPassword" placeholder="Password">
+                <button type="submit">Login</button>
+            </form>
         </div>
     </div>
 
@@ -285,7 +287,7 @@
                 }
             });
         };
-
+        //adding event handler to signup form
         document.getElementById('signupForm').addEventListener('submit', function(e) {
         e.preventDefault(); // prevent default form submission
 
@@ -297,7 +299,7 @@
             confirmPassword: document.getElementById('confirmPassword').value
         };
 
-        fetch('/users', {
+        fetch('/users/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -322,12 +324,83 @@
         .then(data => {
             alert(`User created! Welcome, ${data.firstName}.`);
             closeModal('signupModal');
+            openModal("loginModal");
         })
         .catch(error => {
             alert("Error: " + error.message);
         });
 
     });
+
+    //adding event handler to login form
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // prevent default form submission
+
+            const userData = {
+                email: document.getElementById('lEmail').value,
+                password: document.getElementById('lPassword').value,
+            };
+
+            fetch('/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            })
+            .then(async response => {
+                const contentType = response.headers.get("Content-Type");
+
+                if (!response.ok) {
+                    if (contentType && contentType.includes("application/json")) {
+                        const err = await response.json();
+                        throw new Error(err.error || err.message || "Login failed");
+                    } else {
+                        const text = await response.text();
+                        throw new Error("Server error: " + text.slice(0, 100));
+                    }
+                }
+
+                return response.json();
+            })
+            .then(data => {
+                alert(`Logged in! Welcome, ${data.firstName}.`);
+                closeModal('loginModal');
+
+                // Save token to sessionStorage
+                sessionStorage.setItem('accessToken', data.accessToken);
+
+                // Redirect using token in header via fetch to /home
+                fetch('/home', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + data.accessToken,
+                        "Accept": "text/html"
+                    }
+                })
+                .then(homeResponse => {
+                    if (!homeResponse.ok) {
+                        throw new Error("Unauthorized access to home.");
+                    }
+                    // Replace current document with the home page content
+                    return homeResponse.text();
+                })
+                .then(html => {
+                    document.open();
+                    document.write(html);
+                    document.close();
+                })
+                .catch(error => {
+                    alert("Failed to load home page: " + error.message);
+                });
+            })
+            .catch(error => {
+                alert("Login Error: " + error.message);
+            });
+        });
+
+
+
     </script>
 </body>
 </html>

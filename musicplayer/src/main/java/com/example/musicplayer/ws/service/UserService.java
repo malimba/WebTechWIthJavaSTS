@@ -9,4 +9,5 @@ import com.example.musicplayer.ws.shared.dto.UserDto; //retrieve user dto
 public interface UserService {
     
     UserDto createUser(UserDto user);
+    UserDto loginUser(UserDto user);
 }

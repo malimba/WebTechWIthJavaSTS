@@ -9,11 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 //controller below handles http request to the server
 
 @Controller
-@RequestMapping("/")//base entry point: http://localhost:8080/
+@RequestMapping("")//base entry point: http://localhost:8080/
 public class MainAppController{
     
-    @GetMapping //handling get mapping
+    @GetMapping("") //handling get mapping
     public String HomeView(){
         return "index";
+    }
+
+    @GetMapping("/home")
+    public String MainHomeViw(){
+        System.out.println("Home controller hit!");
+        return "homePage";
     }
 }

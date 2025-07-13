@@ -1,8 +1,11 @@
 package com.example.musicplayer.ws.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -59,5 +62,30 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         return returnValue;
     }
 
-    //retrieving userRepository object to help write to database
+
+    @Override
+    public UserDto loginUser(UserDto user) {
+        //check if user exists
+        Optional<UserEntity> userEntityOpt = userRepository.findByEmail(user.getEmail());
+
+        // check if user exists, else throw error
+        if (userEntityOpt.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with specified email does not exist!");
+        }
+
+        UserEntity userEntity = userEntityOpt.get();
+
+        if(!utils.checkPassword(user.getPassword(), userEntity.getEncryptedPassword())){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password incorrect!");
+        }
+
+        //preparing return DTO
+        UserDto userDto = new UserDto();
+        //copy userEntity details to userDto
+        BeanUtils.copyProperties(userEntity, userDto);
+        return userDto;
+
+        }
+
+    
 }

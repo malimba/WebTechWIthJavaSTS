@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gemann Music - Home</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
+    }
+
+    header {
+      background-color: #1db954;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header input[type="text"] {
+      padding: 10px;
+      width: 300px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .music-container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 20px;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .music-card {
+      background-color: #181818;
+      border-radius: 10px;
+      padding: 15px;
+      width: 200px;
+      text-align: center;
+    }
+
+    .music-card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .music-card h3 {
+      margin: 10px 0 5px;
+    }
+
+    .player-bar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #282828;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .player-bar audio {
+      width: 80%;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Gemann Music</h1>
+    <input type="text" id="searchBox" placeholder="Search music...">
+  </header>
+
+  <div class="music-container" id="musicContainer">
+    <!-- Music tiles will be dynamically loaded -->
+  </div>
+
+  <div class="player-bar">
+    <audio id="player" controls></audio>
+  </div>
+
+  <script>
+    const token = sessionStorage.getItem("accessToken");
+    if (!token) {
+      alert("Unauthorized. Please login first.");
+      window.location.href = "/";
+    }
+
+    const musicData = [
+      {
+        title: "HighLife in G'Major",
+        image: "/images/highLifenGmajor.jpeg",
+        file: "/api/music/play/HiLifeinGmajor.mp3"
+      },
+      {
+        title: "Ye Papa",
+        image: "/images/yePapa.jpeg",
+        file: "/api/music/play/GEMANN. Ye papa. Ghana hilife music..mp3"
+      },
+      {
+        title: "Ebusua",
+        image: "/images/ebususaGeeman.jpg",
+        file: "/api/music/play/Gemann - Ebusua _Deasa Records _ GP 102 CD_ 1991_ - Gemann - SoundLoadMate.com.mp3"
+      }
+    ];
+
+    const container = document.getElementById("musicContainer");
+    const player = document.getElementById("player");
+
+    musicData.forEach(track => {
+      const card = document.createElement("div");
+      card.className = "music-card";
+      card.innerHTML = `
+        <img src="${track.image}" alt="${track.title}">
+        <h3>${track.title}</h3>
+        <button onclick="playSong('${track.file}')">Play</button>
+      `;
+      container.appendChild(card);
+    });
+
+    function playSong(src) {
+      player.src = src;
+      player.play();
+    }
+  </script>
+</body>
+</html>
