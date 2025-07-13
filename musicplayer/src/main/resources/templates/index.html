@@ -367,8 +367,8 @@
                 alert(`Logged in! Welcome, ${data.firstName}.`);
                 closeModal('loginModal');
 
-                // Save token to sessionStorage
-                sessionStorage.setItem('accessToken', data.accessToken);
+                // Save token localStorage
+                localStorage.setItem('accessToken', data.accessToken);
 
                 // Redirect using token in header via fetch to /home
                 fetch('/home', {

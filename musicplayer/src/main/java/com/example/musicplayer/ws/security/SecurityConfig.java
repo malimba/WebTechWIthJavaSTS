@@ -29,8 +29,8 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/users/signup", "/users/login", "/api/music/**", "/images/**", "/music/**").permitAll() //allowing access without Bearer header
-                        .requestMatchers("/home").authenticated()
+                        .requestMatchers("/","/users/signup", "/users/login", "/images/**", "/music/**").permitAll() //allowing access without Bearer header
+                        .requestMatchers("/home", "/api/music/**").authenticated()
                         .anyRequest().authenticated() //checking for bearer header
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

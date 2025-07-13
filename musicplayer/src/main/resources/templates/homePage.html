@@ -71,7 +71,7 @@
 <body>
   <header>
     <h1>Gemann Music</h1>
-    <input type="text" id="searchBox" placeholder="Search music...">
+    <input type="text" id="searchInput" placeholder="Search music...">
   </header>
 
   <div class="music-container" id="musicContainer">
@@ -83,7 +83,7 @@
   </div>
 
   <script>
-    const token = sessionStorage.getItem("accessToken");
+    const token = localStorage.getItem("accessToken");
     if (!token) {
       alert("Unauthorized. Please login first.");
       window.location.href = "/";
@@ -110,21 +110,70 @@
     const container = document.getElementById("musicContainer");
     const player = document.getElementById("player");
 
-    musicData.forEach(track => {
+    function playSong(src) {
+      fetch(src, {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Failed to load song: " + response.status);
+        }
+        return response.blob();
+      })
+      .then(blob => {
+        const audioURL = URL.createObjectURL(blob);
+        player.src = audioURL;
+        player.play();
+      })
+      .catch(err => {
+        alert("Could not play song: " + err.message);
+        console.error(err);
+      });
+    }
+
+
+    function renderCard(title, image, file) {
       const card = document.createElement("div");
       card.className = "music-card";
       card.innerHTML = `
-        <img src="${track.image}" alt="${track.title}">
-        <h3>${track.title}</h3>
-        <button onclick="playSong('${track.file}')">Play</button>
+        <img src="${image}" alt="${title}">
+        <h3>${title}</h3>
+        <button onclick="playSong('${file}')">Play</button>
       `;
       container.appendChild(card);
+    }
+
+    // Render default songs
+    musicData.forEach(track => {
+      renderCard(track.title, track.image, track.file);
     });
 
-    function playSong(src) {
-      player.src = src;
-      player.play();
+    // Fetch search results and display using player bar
+    function fetchSongs(query = '') {
+      fetch(`/api/music/list?search=${encodeURIComponent(query)}`, {
+        method: "GET",
+        headers: {
+          'Authorization': 'Bearer ' + token,
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        container.innerHTML = "";
+        data.forEach(song => {
+          renderCard(song.name, "/images/default-cover.png", song.url);
+        });
+      });
     }
+
+    // Attach input listener
+    document.getElementById("searchInput").addEventListener("input", function () {
+      fetchSongs(this.value);
+    });
+
+    // Optionally preload everything on load
   </script>
 </body>
 </html>
