@@ -1,78 +1,53 @@
-# WebTechWithJava Projects
+# Web Tech with Java (STS)
 
-This repository contains several Java-based Spring Boot web applications developed during my exploration of backend web technologies. Each project in this folder showcases different aspects of building RESTful services, securing APIs, and rendering dynamic web content. The stack used across all projects includes:
+A collection of **Spring Boot** learning projects — REST APIs, JWT security, Thymeleaf MVC, and a minimal music player. Built while exploring backend web technologies in Spring Tool Suite.
 
-- **Java 17+**
-- **Spring Boot**
-- **Spring Security**
-- **Thymeleaf (for dynamic HTML pages)**
-- **JWT Authentication**
-- **Maven**
+![Java](https://img.shields.io/badge/Java-17+-007396?style=flat-square&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=flat-square&logo=springboot&logoColor=white)
 
----
+## Stack (all projects)
 
-## 📁 Projects Overview
+- Java 17+
+- Spring Boot 3.x
+- Spring Security + JWT
+- Thymeleaf (server-rendered HTML)
+- Maven
 
-### 🎵 `musicplayer` – Minimalistic Web Music Player
+## Projects
 
-A feature-light but functional music streaming platform where users can:
-- **Register and log in** securely with JWT tokens.
-- **Browse and search** through available music.
-- **Play songs directly** in-browser using a built-in HTML5 audio player.
-- **Access static assets** like music files and cover images.
-- Features a **minimalistic UI** with logout support and protected music streaming endpoints.
+### `musicplayer/` — Web Music Player
 
-**Stack**: Spring Boot, JWT, HTML5, JS, CSS
+Minimal music streaming UI with Spring Security, JWT sessions, MySQL + JPA, and Thymeleaf templates. Close cousin of [GeeManMusic](https://github.com/malimba/GeeManMusic).
 
----
+```bash
+cd musicplayer && mvn spring-boot:run
+```
 
-### 🔐 `mobile-app-ws` & `mobile-app-ws2` – Secure User REST APIs (Trial Projects)
+### `mobil-app-ws/` & `mobile-app-ws2/` — JWT REST APIs
 
-These two projects are exploratory trials inspired by the *AppsDeveloperBlog* tutorials. They cover:
-- RESTful user registration and login.
-- Password encryption and secure storage.
-- Stateless JWT-based authentication and authorization.
-- Basic service-layer architecture with DTOs and repositories.
+Two iterations of a secured REST backend — token issuance, protected routes, and API-first design without a heavy frontend.
 
-**Stack**: Spring Boot, Spring Security, JWT, REST API, Maven
+```bash
+cd mobil-app-ws && mvn spring-boot:run
+```
 
----
+### `springmvc-ws` — Full MVC + Swagger
 
-### 🌐 `springmvc-ws` – Web MVC + REST with Extended Features (Trial Project)
+Server-rendered MVC application with OpenAPI/Swagger documentation — useful reference for traditional Spring web apps.
 
-This project is a more complete version that includes:
-- Secure login, password reset flow, and email templates.
-- Address management tied to user profiles.
-- Exception handling, error responses, and custom global handlers.
-- Full REST + MVC setup with DTO mapping, services, and persistence layers.
+## Common run pattern
 
-**Extras**:
-- Swagger integration for API testing
-- Amazon SES (mocked setup) for email
+```bash
+cd <project-folder>
+mvn spring-boot:run
+# default http://localhost:8080
+```
 
-**Stack**: Spring Boot, Spring MVC, Spring Security, JPA, Swagger
+## Notes
+
+- Folder `mobil-app-ws` is intentionally spelled that way (historic typo preserved).
+- Each subproject has its own `pom.xml` and can run independently.
 
 ---
 
-## 🧱 General Architecture & Approach
-
-Each project follows a layered architecture with the following structure:
-Controller → Service → DTO → Repository → Entity
-
-
-Security is enforced via **Spring Security with JWT** (in applicable projects). Static resources and templates are placed in the standard `/resources/static` and `/resources/templates` folders.
-
----
-
-## 🚀 How to Run
-
-1. Ensure Java & Maven are installed.
-2. Clone the repository.
-3. Navigate into any project folder, then run:
-   ```bash
-   mvn spring-boot:run
-Visit http://localhost:8080 in your browser.
-
-👨‍💻 Author
-George Malimba Billa-Yandanbon
-Built during practical sessions for learning web development with Java and Spring Boot.
+[malimba](https://github.com/malimba)
