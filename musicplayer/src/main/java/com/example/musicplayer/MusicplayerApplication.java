@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import io.github.cdimascio.dotenv.Dotenv;
-
+// man sprbt tie
 @SpringBootApplication
 public class MusicplayerApplication {
 
